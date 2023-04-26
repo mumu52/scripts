@@ -1,9 +1,7 @@
 //阿里云盘连续签到活动
-
-
 const $ = API();
+const notify = require('./sendNotify'); 
 const refresh_token = process.env.aliyunPanToken;//抓包搜请求体关键字:refresh_token
-const notify = $.isNode() ? require('./sendNotify') : ''; 
 let msg = '';
 
 !(async () => {
@@ -58,7 +56,7 @@ async function main() {
     } catch (error) {
         console.log('error:' + error);
     }finally{
-        await SendMsg(msg); 
+        await notify.sendNotify(msg,"hh"); 
     }
 }
 
@@ -90,12 +88,12 @@ async function sign() {
         let data = JSON.parse(a.body);
         if (data.success) {
             console.log(`已连续签到${data.result.signInCount}天!`);
-            msg+=`已连续签到${data.result.signInCount}天!`;
+            msg+=`已连续签到${data.result.signInCount}天!\n`;
             await sign_in_reward(data.result.signInCount);
         }
         else {
             console.log(`签到失败,${data.message}!`);
-            msg+=`签到失败,${data.message}!`;
+            msg+=`签到失败,${data.message}!\n`;
         }
 
     } catch (error) {
@@ -132,11 +130,11 @@ async function sign_in_reward(day) {
         let data = JSON.parse(a.body);
         if (data.success) {
             console.log(`奖励:${data.result.name},${data.result.description},${data.result.notice}!`);
-            msg+=`奖励:${data.result.name},${data.result.description},${data.result.notice}!`
+            msg+=`奖励:${data.result.name},${data.result.description},${data.result.notice}!\n`
         }
         else {
             console.log(`奖励获取失败:${data.message}!`);
-            msg+=`奖励获取失败:${data.message}!`
+            msg+=`奖励获取失败:${data.message}\n!`
         }
 
     } catch (error) {
