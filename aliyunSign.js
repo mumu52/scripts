@@ -1,8 +1,9 @@
 //阿里云盘连续签到活动
 
-const notify = $.isNode() ? require('./sendNotify') : ''; 
+
 const $ = API();
 const refresh_token = process.env.aliyunPanToken;//抓包搜请求体关键字:refresh_token
+const notify = $.isNode() ? require('./sendNotify') : ''; 
 let msg = '';
 
 !(async () => {
